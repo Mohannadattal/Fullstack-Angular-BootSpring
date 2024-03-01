@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  currentCategoryId: number = 1;
+  currentCategoryId: number = 5;
   previousCategoryId: number = 1;
   searchMode: boolean = false;
 
@@ -91,5 +91,11 @@ export class ProductListComponent implements OnInit {
         this.pageSize = data.page.size;
         this.totalElements = data.page.totalElements;
       });
+  }
+
+  updatePageSize(thePageSize: string) {
+    this.pageSize = +thePageSize;
+    this.pageNumber = 1;
+    this.listProducts();
   }
 }
