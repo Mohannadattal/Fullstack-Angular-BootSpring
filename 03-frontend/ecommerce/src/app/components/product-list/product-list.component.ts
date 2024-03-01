@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent implements OnInit {
-
   products: Product[] = [];
   currentCategoryId: number = 5;
   previousCategoryId: number = 1;
@@ -117,9 +116,7 @@ export class ProductListComponent implements OnInit {
     };
   }
 
-
   addToCart(theProduct: Product) {
-console.log(`Adding to cart: ${theProduct.name},  ${theProduct.unitPrice}`);
-
-    }
+    console.log(`Adding to cart: ${theProduct.name},  ${theProduct.unitPrice}`);
+  }
 }
