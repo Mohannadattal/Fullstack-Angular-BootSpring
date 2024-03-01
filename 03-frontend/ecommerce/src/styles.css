@@ -93,7 +93,8 @@ h6 {
 }
 
 a {
-  display: inline-block
+  display: inline-block;
+
 }
 
 a:active,
@@ -582,6 +583,11 @@ input.au-input.au-input-xl {
   font-weight: 800;
   color: #0da8e4
 }
+
+a > h1 {
+  color: #000;
+}
+
 
 .product-box h1 {
   font-size: 18px;
@@ -1079,7 +1085,7 @@ footer ul li {
   }
 
   .product-box {
-    text-align: centerg
+    text-align: center
   }
 
   .page-container {
