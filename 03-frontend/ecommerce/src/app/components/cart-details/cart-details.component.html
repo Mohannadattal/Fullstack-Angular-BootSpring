@@ -20,10 +20,17 @@
             <p>{{ cartItem.name }}</p>
             <p>{{ cartItem.unitPrice | currency : "USD" }}</p>
           </td>
-          <div class="items">
-            <label>Quantity:</label>
-            {{ cartItem.quantity }}
-          </div>
+          <td>
+            <div class="items">
+              <label>Quantity:</label>
+              {{ cartItem.quantity }}
+            </div>
+            <p class="mt-2">
+              Subtotal:{{
+                cartItem.quantity * cartItem.unitPrice | currency : "USD"
+              }}
+            </p>
+          </td>
         </tr>
       </table>
     </div>
