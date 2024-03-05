@@ -551,7 +551,7 @@ input.au-input.au-input-xl {
 }
 
 .main-content.page-m {
-  padding: 10% 15% !important
+  padding: 10% 30% 10% 5%
 }
 
 /*
@@ -584,7 +584,7 @@ input.au-input.au-input-xl {
   color: #0da8e4
 }
 
-a > h1 {
+a>h1 {
   color: #000;
 }
 
