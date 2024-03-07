@@ -36,12 +36,12 @@ export class CheckoutComponent implements OnInit {
         firstName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
-          ShopValidators.notOnlyWhiteSpace
+          ShopValidators.notOnlyWhiteSpace,
         ]),
         lastName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
-          ShopValidators.notOnlyWhiteSpace
+          ShopValidators.notOnlyWhiteSpace,
         ]),
         email: new FormControl('', [
           Validators.required,
