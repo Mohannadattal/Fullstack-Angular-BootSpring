@@ -1,9 +1,11 @@
 package com.mocode.springbootecommerce.dto;
 
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 public class PurchaseResponse {
 
-    private String orderTrackingNumber;
+
+    private final String orderTrackingNumber;
 }
