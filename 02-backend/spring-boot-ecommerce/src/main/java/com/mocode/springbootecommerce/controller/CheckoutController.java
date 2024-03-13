@@ -13,7 +13,6 @@ public class CheckoutController {
 
     private CheckoutService checkoutService;
 
-    @Autowired
     public CheckoutController(CheckoutService checkoutService) {
         this.checkoutService = checkoutService;
     }
@@ -22,6 +21,8 @@ public class CheckoutController {
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase) {
 
         PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
+
         return purchaseResponse;
     }
+
 }

@@ -18,10 +18,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private CustomerRepository customerRepository;
 
-    @Autowired
     public CheckoutServiceImpl(CustomerRepository customerRepository) {
-     this.customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
     }
+
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
@@ -59,5 +59,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         //
         return UUID.randomUUID().toString();
     }
-    }
+}
+
+
 

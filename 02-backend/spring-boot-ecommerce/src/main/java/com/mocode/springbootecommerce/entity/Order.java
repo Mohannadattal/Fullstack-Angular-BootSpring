@@ -2,6 +2,8 @@ package com.mocode.springbootecommerce.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
-@Data
+@Getter
+@Setter
 
 public class Order {
 
@@ -21,7 +24,7 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "order_tracking-number")
+    @Column(name = "order_tracking_number")
     private String orderTrackingNumber;
 
     @Column(name = "total_quantity")
@@ -52,12 +55,12 @@ public class Order {
     @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
     private Address shippingAddress;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
     public void add(OrderItem item) {
+
         if (item != null) {
             if (orderItems == null) {
                 orderItems = new HashSet<>();
