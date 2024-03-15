@@ -10,7 +10,8 @@ export class CartService {
   totalPrice: Subject<number> = new BehaviorSubject<number>(0);
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  storage: Storage = sessionStorage;
+  //storage: Storage = sessionStorage;
+  storage: Storage = localStorage;
 
   constructor() {
     // read the data from storage
@@ -65,6 +66,9 @@ export class CartService {
 
     // log cart data for debugging
     this.logCartData(totalPriceValue, totalQuantityValue);
+
+    // persist cart data
+    this.persistCartItems();
   }
 
   persistCartItems() {
