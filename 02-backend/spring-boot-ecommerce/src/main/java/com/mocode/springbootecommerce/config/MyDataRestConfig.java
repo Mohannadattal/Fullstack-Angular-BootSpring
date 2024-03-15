@@ -22,9 +22,8 @@ import java.util.Set;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
-
-
-
+    @Value("${allowed.origins}")
+    private String[] theAllowedOrigins;
     private EntityManager entityManager;
 
     @Autowired
@@ -32,14 +31,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         entityManager = theEntitymanager;
     }
 
-    @Value("${allowed.origins}")
-    private String[] theAllowedOrigins;
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-
-        // configure cors mapping
-        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(theAllowedOrigins);
 
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH};
 
@@ -52,20 +46,17 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
 
-
-
-
         // call an internal helper method
         exposeIds(config);
+
+        // configure cors mapping
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(theAllowedOrigins);
 
 
     }
 
     private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
-        config.getExposureConfiguration()
-                .forDomainType(theClass)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+        config.getExposureConfiguration().forDomainType(theClass).withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions)).withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {
