@@ -94,13 +94,14 @@ h6 {
 
 a {
   display: inline-block;
+  text-decoration:  none !important;
 
 }
 
 a:active,
 a:focus,
 a:hover {
-  text-decoration: none;
+
   outline: 0
 }
 
@@ -586,6 +587,8 @@ input.au-input.au-input-xl {
 
 a>h1 {
   color: #000;
+
+
 }
 
 
@@ -595,7 +598,8 @@ a>h1 {
   padding-bottom: 5px;
   font-weight: 600;
   padding-top: 12px;
-  margin-bottom: 7px
+  margin-bottom: 7px;
+
 }
 
 .product-box h2 {
