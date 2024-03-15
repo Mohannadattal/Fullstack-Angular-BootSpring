@@ -30,5 +30,8 @@
   -webkit-transition: all .5s ease;
   -o-transition: all .5s ease;
   -moz-transition: all .5s ease;
-  transition: all .5s ease
+  transition: all .5s ease;
+  color: #fff;
+   font-weight: bold;
+
 }
