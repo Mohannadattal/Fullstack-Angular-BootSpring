@@ -78,6 +78,9 @@
             "production": {
               "buildTarget": "ecommerce:build:production"
             },
+            "qa": {
+              "buildTarget": "ecommerce:build:qa"
+            },
             "development": {
               "buildTarget": "ecommerce:build:development"
             }
