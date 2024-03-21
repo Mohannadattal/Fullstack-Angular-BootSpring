@@ -5,7 +5,6 @@ import { Product } from '../common/product';
 import { ProductCategory } from '../common/product-category';
 import { environment } from '../../environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -32,6 +31,8 @@ export class ProductService {
     const searchUrl =
       `${this.baseUrl}/search/findByCategoryId?id=${categoryId}` +
       `&page=${page}&size=${pageSize}`;
+    console.log(`Getting Products from - ${searchUrl}`);
+
     return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
 
