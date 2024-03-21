@@ -28,7 +28,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Promise<HttpEvent<any>> {
     // only add an access token for secured endpoint
-    const endpoint = environment.wowShopApiUrl + 'orders';
+    const endpoint = environment.wowShopApiUrl + '/orders';
     const securedEndpoints = [endpoint];
 
     if (securedEndpoints.some((url) => request.urlWithParams.includes(url))) {
