@@ -265,7 +265,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   onSubmit() {
-
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
       return;
@@ -330,7 +329,7 @@ export class CheckoutComponent implements OnInit {
     this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = 'USD';
 
-    console.log(`this.paymentInfo.amount:${this.paymentInfo.amount}`)
+    console.log(`this.paymentInfo.amount:${this.paymentInfo.amount}`);
 
     // if valid form then
     // create payment intent
@@ -350,6 +349,17 @@ export class CheckoutComponent implements OnInit {
               {
                 payment_method: {
                   card: this.cardElement,
+                  billing_details: {
+                    email: purchase.customer.email,
+                    name: `${purchase.customer.firstName} ${purchase.customer.lastName}`,
+                    address: {
+                      line1: purchase.billingAddress.street,
+                      city: purchase.billingAddress.city,
+                      state: purchase.billingAddress.state,
+                      postal_code: purchase.billingAddress.zipCode,
+                      country: this.billingAddressCountry.value.code,
+                    },
+                  },
                 },
               },
               { handleActions: false }
