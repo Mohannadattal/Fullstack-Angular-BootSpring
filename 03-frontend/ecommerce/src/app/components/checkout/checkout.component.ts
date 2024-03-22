@@ -16,6 +16,9 @@ import { Order } from '../../common/order';
 import { OrderItem } from '../../common/order-item';
 import { Purchase } from '../../common/purchase';
 
+import { environment } from '../../../environments/environment';
+import { PaymentInfo } from '../../common/payment-info';
+
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -30,8 +33,14 @@ export class CheckoutComponent implements OnInit {
   countries: Country[] = [];
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
-  storage:Storage = sessionStorage;
+  storage: Storage = sessionStorage;
 
+  // initialize Stripe API
+
+  stripe = Stripe(environment.stripePublishableKey);
+  paymentInfo: PaymentInfo = new PaymentInfo();
+  cardElement: any = '';
+  displayError: any = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,10 +51,12 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // setup Stripe payment form
+    this.setupStripePaymentForm();
     this.reviewCartDetails();
 
     // read the user's email address from browser storage
-    const email = JSON.parse(this.storage.getItem('userEmail')!)
+    const email = JSON.parse(this.storage.getItem('userEmail')!);
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
@@ -104,38 +115,38 @@ export class CheckoutComponent implements OnInit {
         ]),
       }),
       creditCard: this.formBuilder.group({
-        cardType: new FormControl('', [Validators.required]),
-        nameOnCard: new FormControl('', [
-          Validators.required,
-          Validators.minLength(2),
-          ShopValidators.notOnlyWhiteSpace,
-        ]),
-        cardNumber: new FormControl('', [
-          Validators.required,
-          Validators.pattern('[0-9]{16}'),
-        ]),
-        securityCode: new FormControl('', [
-          Validators.required,
-          Validators.pattern('[0-9]{3}'),
-        ]),
-        expirationMonth: [''],
-        expirationYear: [''],
+        //   cardType: new FormControl('', [Validators.required]),
+        //   nameOnCard: new FormControl('', [
+        //     Validators.required,
+        //     Validators.minLength(2),
+        //     ShopValidators.notOnlyWhiteSpace,
+        //   ]),
+        //   cardNumber: new FormControl('', [
+        //     Validators.required,
+        //     Validators.pattern('[0-9]{16}'),
+        //   ]),
+        //   securityCode: new FormControl('', [
+        //     Validators.required,
+        //     Validators.pattern('[0-9]{3}'),
+        //   ]),
+        //   expirationMonth: [''],
+        //   expirationYear: [''],
       }),
     });
 
-    // populate credit card Months
-    const startMonth: number = new Date().getMonth() + 1; // get the current month
-    console.log('startMonth: ' + startMonth);
-    this.formService.getCreditCardMonth(startMonth).subscribe((data) => {
-      console.log('Retrieved credit card months: ' + JSON.stringify(data));
-      this.creditCardMonths = data;
-    });
+    // // populate credit card Months
+    // const startMonth: number = new Date().getMonth() + 1; // get the current month
+    // console.log('startMonth: ' + startMonth);
+    // this.formService.getCreditCardMonth(startMonth).subscribe((data) => {
+    //   console.log('Retrieved credit card months: ' + JSON.stringify(data));
+    //   this.creditCardMonths = data;
+    // });
 
-    // populate credit card Years
-    this.formService.getCreditCardYear().subscribe((data) => {
-      console.log('Retrieved credit card years: ' + JSON.stringify(data));
-      this.creditCardYears = data;
-    });
+    // // populate credit card Years
+    // this.formService.getCreditCardYear().subscribe((data) => {
+    //   console.log('Retrieved credit card years: ' + JSON.stringify(data));
+    //   this.creditCardYears = data;
+    // });
 
     // populate countries
     this.formService.getCountries().subscribe((data) => {
@@ -144,6 +155,31 @@ export class CheckoutComponent implements OnInit {
       this.countries = data;
     });
   }
+
+  setupStripePaymentForm() {
+    // get a handle to stripe elements
+    var elements = this.stripe.elements();
+
+    // create a card element
+    this.cardElement = elements.create('card', { hidePostalCode: true });
+
+    // add an instance of card UI card component into the card-element div
+    this.cardElement.mount('#card-element');
+
+    // add event binding for change event on on the card element
+    this.cardElement.on('change', (event: any) => {
+      // get a handle to card-errors element
+      this.displayError = document.getElementById('card-errors');
+
+      if (event.complete) {
+        this.displayError.textContent = '';
+      } else if (event.error) {
+        // show validation error to customer
+        this.displayError.textContent = event.error.message;
+      }
+    });
+  }
+
   reviewCartDetails() {
     // subscribe to cartService.totalQuantity
     this.cartService.totalQuantity.subscribe(
