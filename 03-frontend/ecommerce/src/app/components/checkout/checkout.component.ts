@@ -326,20 +326,58 @@ export class CheckoutComponent implements OnInit {
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    // call REST API via the checkoutService
-    this.checkoutService.placeOrder(purchase).subscribe({
-      next: (response) => {
-        alert(
-          `Your order has been received. \nOrder tracking number:${response.orderTrackingNumber} `
-        );
+    // compute payment info
+    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.currency = 'USD';
 
-        // rest cart
-        this.resetCart();
-      },
-      error: (error) => {
-        alert(`There was an error: ${error.message}`);
-      },
-    });
+    // if valid form then
+    // create payment intent
+    // confirm card payment
+    // place order
+
+    if (
+      !this.checkoutFormGroup.invalid &&
+      this.displayError.textContent === ''
+    ) {
+      this.checkoutService
+        .createPaymentIntent(this.paymentInfo)
+        .subscribe((paymentIntentResponse) => {
+          this.stripe
+            .confirmCardPayment(
+              paymentIntentResponse.client_secret,
+              {
+                payment_method: {
+                  card: this.cardElement,
+                },
+              },
+              { handleActions: false }
+            )
+            .then((result: any) => {
+              if (result.error) {
+                // inform the customer there was an error
+                alert(`There was an error: ${result.error.message}`);
+              } else {
+                // call Res API via the CheckoutService
+                this.checkoutService.placeOrder(purchase).subscribe({
+                  next: (response: any) => {
+                    alert(
+                      `Your order has been received.\nOrder tracking number:${response.orderTrackingNumber} `
+                    );
+
+                    // reset cart
+                    this.resetCart();
+                  },
+                  error: (error: any) => {
+                    alert(`There was an error: ${error.message}`);
+                  },
+                });
+              }
+            });
+        });
+    } else {
+      this.checkoutFormGroup.markAllAsTouched();
+      return;
+    }
   }
 
   resetCart() {
